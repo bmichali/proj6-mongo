@@ -43,7 +43,7 @@ def test_del(records, counter):
     for record in records:
         collection.delete_one({"token": counter})
         counter -= 1
-        assert collection.size() == counter
+    assert collection.count() == counter
 
 test_add(records, counter)
 test_del(records, counter)
