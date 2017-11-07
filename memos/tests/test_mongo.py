@@ -28,8 +28,8 @@ except:
 
 def test_add():
     counter = collection.count()
-    collection.insert({"type": "test_memo", "token": 1})
-    collection.insert({"type": "test_memo", "token": 2})
+    collection.insert_one({"type": "test_memo", "token": 1})
+    collection.insert_one({"type": "test_memo", "token": 2})
 
     assert collection.count() == counter + 2
 
