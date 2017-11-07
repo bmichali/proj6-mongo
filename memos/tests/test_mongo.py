@@ -38,7 +38,7 @@ def test_del():
     collection.delete_one({"token": 2})
     assert collection.count() == counter - 1
     collection.delete_one({"token": 1})
-    assert collection.count() == counter - 1
+    assert collection.count() == counter - 2
 
 test_add()
 test_del()
