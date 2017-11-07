@@ -30,11 +30,9 @@ counter = 0
 
 
 def test_add(records, counter):
-    collection.insert({"type": "test_memo", "date": "test_now", "token": counter})
+    collection.insert({"type": "test_memo", "token": counter})
     for record in collection.find({"type": "test_memo"}):
-        records.append(
-            {"date": arrow.get(record['date']).to('local').isoformat(),
-             "token": counter})
+        records.append(counter)
         counter += 1
 
     assert len(records) == collection.count()
