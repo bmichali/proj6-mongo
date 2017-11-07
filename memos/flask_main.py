@@ -21,7 +21,11 @@ from flask import url_for
 import json
 import logging
 
+import os
 import sys
+import binascii
+from uuid import uuid4
+rand_token = uuid4()
 
 # Date handling 
 import arrow   
@@ -66,6 +70,8 @@ except:
     sys.exit(1)
 
 
+def generate_key():
+    return binascii.hexlify(os.urandom(10)).decode()
 
 ###
 # Pages
@@ -82,10 +88,10 @@ def index():
 
 
 # We don't have an interface for creating memos yet
-# @app.route("/create")
-# def create():
-#     app.logger.debug("Create")
-#     return flask.render_template('create.html')
+@app.route("/create")
+def create():
+    app.logger.debug("Create")
+    return flask.render_template('create.html')
 
 
 @app.errorhandler(404)
@@ -123,6 +129,45 @@ def humanize_arrow_date( date ):
         human = date
     return human
 
+@app.route("/add_memo")
+def add_memo():
+    """
+    Generate unique token, and add memo to DB
+    """
+    app.logger.debug("Got a Memo")
+    token = generate_key()
+    memo_date = request.args.get('date')
+    memo_text = request.args.get("memo_text")
+
+    myMemo ={"type": "dated_memo", "date": str(arrow.get(memo_date)), "text": memo_text, "token": token}
+    try:
+        result = myMemo
+        collection.insert_one(myMemo)
+        del result['_id']
+        app.logger.debug("added a Memo")
+    except:
+        app.logger.debug("Could not add Memo")
+        result = False
+
+    return flask.jsonify(result=result)
+
+@app.route("/del_memo")
+def del_memo():
+    """
+    Delete Memo using unique token
+    """
+    app.logger.debug("Got a Token")
+    token = request.args.get('token')
+
+    try:
+        collection.delete_one({"token": token})
+        app.logger.debug("removed a memo")
+        result = True
+    except:
+        app.logger.debug("could not remove memo")
+        result = False
+
+    return flask.jsonify(result=result)
 
 #############
 #
