@@ -27,16 +27,16 @@ except:
 
 
 def test_add():
-    records = []
-    counter = 0
+    counter = collection.count()
     collection.insert({"type": "test_memo", "token": 1})
     collection.insert({"type": "test_memo", "token": 2})
 
-
-    assert 2 == collection.count()
+    assert collection.count() == counter + 2
 
 def test_del():
     collection.delete_one({"token": 2})
+    assert collection.count() == collection.count() - 1
+    collection.delete_one({"token": 1})
     assert collection.count() == collection.count() - 1
 
 test_add()
