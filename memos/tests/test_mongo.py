@@ -27,7 +27,7 @@ except:
     sys.exit(1)
 
 records = []
-counter = 1
+counter = 0
 
 
 def test_add(records, counter):
@@ -43,8 +43,7 @@ def test_del(records, counter):
     for record in records:
         collection.delete_one({"token": counter})
         counter -= 1
-        log.debug(collection.count(), counter)
-        assert collection.count() == counter
+        assert collection.size() == counter
 
 test_add(records, counter)
 test_del(records, counter)
