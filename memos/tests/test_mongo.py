@@ -29,18 +29,15 @@ except:
 def test_add():
     records = []
     counter = 0
-    collection.insert({"type": "test_memo", "token": counter})
-    for record in collection.find({"type": "test_memo"}):
-        records.append(counter)
-        counter += 1
+    collection.insert({"type": "test_memo", "token": 1})
+    collection.insert({"type": "test_memo", "token": 2})
 
-    assert len(records) == collection.count()
 
-    return records, counter
+    assert 2 == collection.count()
 
-def test_del(records, counter):
-    collection.delete_one({"token": counter})
-    assert collection.count() == len(records) - 1
+def test_del():
+    collection.delete_one({"token": 2})
+    assert collection.count() == 1
 
-records, counter = test_add()
-test_del(records, counter)
+test_add()
+test_del()
