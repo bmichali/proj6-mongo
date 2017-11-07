@@ -40,10 +40,8 @@ def test_add(records, counter):
 
 
 def test_del(records, counter):
-    for record in records:
-        collection.delete_one({"token": counter})
-        counter -= 1
-    assert collection.count() == counter
+    collection.delete_one({"token": counter})
+    assert collection.count() == len(records) - 1
 
 test_add(records, counter)
 test_del(records, counter)
