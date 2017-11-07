@@ -16,6 +16,7 @@ MONGO_CLIENT_URL = "mongodb://{}:{}@{}:{}/{}".format(
     CONFIG.DB_PORT,
     CONFIG.DB)
 
+
 try:
     dbclient = MongoClient(MONGO_CLIENT_URL)
     db = getattr(dbclient, CONFIG.DB)
@@ -42,6 +43,7 @@ def test_del(records, counter):
     for record in records:
         collection.delete_one({"token": counter})
         counter -= 1
+        log.debug(collection.count(), counter)
         assert collection.count() == counter
 
 test_add(records, counter)
