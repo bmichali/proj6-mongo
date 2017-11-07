@@ -26,7 +26,7 @@ except:
     sys.exit(1)
 
 records = []
-counter = 0
+counter = 1
 
 
 def test_add(records, counter):
