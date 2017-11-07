@@ -16,7 +16,6 @@ MONGO_CLIENT_URL = "mongodb://{}:{}@{}:{}/{}".format(
     CONFIG.DB_PORT,
     CONFIG.DB)
 
-
 try:
     dbclient = MongoClient(MONGO_CLIENT_URL)
     db = getattr(dbclient, CONFIG.DB)
@@ -26,11 +25,10 @@ except:
     print("Failure opening database.  Is Mongo running? Correct password?")
     sys.exit(1)
 
-records = []
-counter = 0
 
-
-def test_add(records, counter):
+def test_add():
+    records = []
+    counter = 0
     collection.insert({"type": "test_memo", "token": counter})
     for record in collection.find({"type": "test_memo"}):
         records.append(counter)
@@ -38,10 +36,11 @@ def test_add(records, counter):
 
     assert len(records) == collection.count()
 
+    return records, counter
 
 def test_del(records, counter):
     collection.delete_one({"token": counter})
     assert collection.count() == len(records) - 1
 
-test_add(records, counter)
+records, counter = test_add()
 test_del(records, counter)
